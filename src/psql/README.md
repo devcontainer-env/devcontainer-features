@@ -7,7 +7,7 @@ Installs psql, the PostgreSQL interactive terminal.
 
 ```json
 "features": {
-    "ghcr.io/devcontainer-env/features/psql:1": {}
+    "ghcr.io/features/psql:1": {}
 }
 ```
 
