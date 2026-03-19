@@ -1,0 +1,11 @@
+{
+    "id": "psql",
+    "name": "PostgreSQL Client",
+    "version": "1.0.0",
+    "description": "Installs psql, the PostgreSQL interactive terminal.",
+    "documentationURL": "https://github.com/devcontainer-env/devcontainer-features/tree/main/src/psql",
+    "options": {},
+    "installsAfter": [
+        "ghcr.io/devcontainers/features/common-utils"
+    ]
+}
