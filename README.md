@@ -1,4 +1,4 @@
-# devcontainer-env/devcontainer-features
+# devcontainer-features
 
 > One line in `devcontainer.json`. Your tools, ready to go.
 
@@ -42,7 +42,6 @@ Installs [psql](https://www.postgresql.org/docs/current/app-psql.html), the Post
   },
 }
 ```
-
 
 ## Repository Structure
 
