@@ -7,7 +7,7 @@ Manage your database schema as code.
 
 ```json
 "features": {
-    "ghcr.io/devcontainer-env/features/atlas:1": {}
+    "ghcr.io/features/atlas:1": {}
 }
 ```
 
