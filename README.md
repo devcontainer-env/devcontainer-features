@@ -2,6 +2,7 @@
 
 > One line in `devcontainer.json`. Your tools, ready to go.
 
+[![CI - Test Features](https://github.com/devcontainer-env/devcontainer-features/actions/workflows/test.yaml/badge.svg)](https://github.com/devcontainer-env/devcontainer-features/actions/workflows/test.yaml)
 [![Release](https://img.shields.io/github/v/release/devcontainer-env/devcontainer-features)](https://github.com/devcontainer-env/devcontainer-features/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
