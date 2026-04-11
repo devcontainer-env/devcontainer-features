@@ -1,16 +1,47 @@
-name: "release"
-on:
-  push:
-    branches:
-      - main
+name: CI
 
 permissions:
   contents: write
+  id-token: write
   pull-requests: write
   packages: write
 
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
 jobs:
-  release-please:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Check shell script syntax
+        run: |
+          bash -n src/atlas/install.sh
+          bash -n src/psql/install.sh
+      - name: Install latest devcontainer CLI
+        run: npm install -g @devcontainers/cli
+      - name: Test atlas feature
+        run: devcontainer features test -f atlas -i mcr.microsoft.com/devcontainers/base:ubuntu .
+      - name: Test psql feature
+        run: devcontainer features test -f psql -i mcr.microsoft.com/devcontainers/base:ubuntu .
+
+  validate:
+    name: Validate devcontainer-feature.json files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Validate devcontainer-feature.json files
+        uses: devcontainers/action@v1
+        with:
+          validate-only: "true"
+          base-path-to-features: "./src"
+
+  release:
+    needs: [build, validate]
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     outputs:
       releases_created: ${{ steps.release.outputs.releases_created }}
@@ -23,15 +54,14 @@ jobs:
           manifest-file: .github/config/release-please-manifest.json
 
   update-docs:
-    needs: release-please
-    if: ${{ needs.release-please.outputs.pr != '' }}
+    needs: release
+    if: ${{ needs.release.outputs.pr != '' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
         with:
-          ref: ${{ fromJSON(needs.release-please.outputs.pr).headBranchName }}
-
-      - name: "Generate Documentation"
+          ref: ${{ fromJSON(needs.release.outputs.pr).headBranchName }}
+      - name: Generate Documentation
         uses: devcontainers/action@v1
         with:
           generate-docs: "true"
@@ -39,8 +69,7 @@ jobs:
           features-namespace: devcontainer-env/features
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: "Commit Documentation"
+      - name: Commit Documentation
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -49,13 +78,12 @@ jobs:
           git push
 
   publish:
-    needs: release-please
-    if: ${{ needs.release-please.outputs.releases_created == 'true' }}
+    needs: release
+    if: ${{ needs.release.outputs.releases_created == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-
-      - name: "Publish Features"
+      - name: Publish Features
         uses: devcontainers/action@v1
         with:
           publish-features: "true"
