@@ -17,7 +17,8 @@ jobs:
       contents: read
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout
+        uses: actions/checkout@v6
       - name: Check shell script syntax
         run: |
           bash -n src/atlas/install.sh
@@ -30,13 +31,13 @@ jobs:
         run: devcontainer features test -f psql -i mcr.microsoft.com/devcontainers/base:ubuntu .
 
   validate:
-    name: Validate devcontainer-feature.json files
     runs-on: ubuntu-latest
     permissions:
       contents: read
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout
+        uses: actions/checkout@v6
       - name: Validate devcontainer-feature.json files
         uses: devcontainers/action@v1
         with:
@@ -76,7 +77,8 @@ jobs:
       contents: write
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout
+        uses: actions/checkout@v6
         with:
           ref: ${{ fromJSON(needs.release.outputs.pr).headBranchName }}
       - name: Generate Documentation
@@ -104,7 +106,8 @@ jobs:
       packages: write
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout
+        uses: actions/checkout@v6
       - name: Publish Features
         uses: devcontainers/action@v1
         with:
