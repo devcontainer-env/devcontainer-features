@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -44,7 +44,7 @@ jobs:
           base-path-to-features: "./src"
 
   release:
-    needs: [build, validate]
+    needs: [test, validate]
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:
